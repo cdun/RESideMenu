@@ -168,6 +168,11 @@
             [self hideViewController:self.contentViewController];
             [contentViewController didMoveToParentViewController:self];
             _contentViewController = contentViewController;
+            
+            if ([self.delegate conformsToProtocol:@protocol(RESideMenuDelegate)] && [self.delegate respondsToSelector:@selector(sideMenu:didShowContentViewController:)])
+            {
+                [self.delegate sideMenu:self didShowContentViewController:contentViewController];
+            }
 
             [self statusBarNeedsAppearanceUpdate];
             [self updateContentViewShadow];
@@ -719,6 +724,12 @@
 {
     if (!_contentViewController) {
         _contentViewController = contentViewController;
+        
+        if ([self.delegate conformsToProtocol:@protocol(RESideMenuDelegate)] && [self.delegate respondsToSelector:@selector(sideMenu:didShowContentViewController:)])
+        {
+            [self.delegate sideMenu:self didShowContentViewController:contentViewController];
+        }
+        
         return;
     }
     [self hideViewController:_contentViewController];
@@ -728,6 +739,11 @@
     self.contentViewController.view.frame = self.view.bounds;
     [self.contentViewContainer addSubview:self.contentViewController.view];
     [self.contentViewController didMoveToParentViewController:self];
+    
+    if ([self.delegate conformsToProtocol:@protocol(RESideMenuDelegate)] && [self.delegate respondsToSelector:@selector(sideMenu:didShowContentViewController:)])
+    {
+        [self.delegate sideMenu:self didShowContentViewController:contentViewController];
+    }
     
     [self updateContentViewShadow];
     
